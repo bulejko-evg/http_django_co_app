@@ -13,7 +13,9 @@ class BaseModel(models.Model):
     ----------------------
     Attributes:
         is_valid (models.BooleanField): the item model is valid (for admin)
-        is_blocked (models.BooleanField): the item is blocked (for superuser only) 
+        is_blocked (models.BooleanField): the item is blocked (for superuser only)
+    Properties:
+        actual (): get and set (bool), is_valid and not is_blocked
     Methods:
         delete (soft=False): delete or soft delete
         is_actual (): get tuple, is the model item actual (valid and not blocked), with fail messages (list[str])
@@ -26,6 +28,15 @@ class BaseModel(models.Model):
     )
 
     objects = BaseQuerySet.as_manager()
+
+    @property
+    def actual(self) -> bool:
+        return self.is_valid and not self.is_blocked
+    
+    @actual.setter
+    def actual(self, val) -> None:
+        self.is_valid = val
+        self.is_blocked = not val
 
     class Meta:
         verbose_name = None

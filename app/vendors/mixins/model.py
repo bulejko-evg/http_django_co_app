@@ -90,7 +90,7 @@ class RolePermissionsMixin(models.Model):
         abstract = True
     
     def get_permissions(self) -> dict:
-        """Get _permissions attribute"""
+        """Get _permissions attribute or empty dict"""
         return getattr(self, "_permissions", {})
     
     def __setattr__(self, name: str, value: Any) -> None:

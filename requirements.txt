@@ -1,0 +1,14 @@
+Django
+Pillow
+python-decouple
+celery
+redis
+django-debug-toolbar
+factory-boy
+Faker
+pytest
+pytest-django
+pytest-factoryboy
+python-magic
+selenium
+six
