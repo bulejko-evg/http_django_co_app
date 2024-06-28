@@ -108,7 +108,7 @@ def get_html_tag_style(**kwargs: str) -> str:
     )
 
 
-def get_format_html_img(src: str, width: int, **attributes: str) -> str:
+def get_format_html_img_tag(src: str, width: int, **attributes: str) -> str:
     """
     Get format html img tag by src, width and any attributes.
     ---------------------------------------------------------
