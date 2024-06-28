@@ -52,7 +52,6 @@ IMAGE_WIDTH = {
     "user": 120,
 }
 
-mb = 1048576
 pdf = ("pdf", "application/pdf", "PDF document")
 png = ("png", "image/png", "PNG")
 jpg = ("jpg", "image/jpeg", "JFIF")
@@ -71,16 +70,16 @@ xml = ("xml", "application/xml", "XML")
 rar = ("rar", "application/vnd.rar", "RAR")
 csv = ("csv", "text/csv", "CSV")
 
+FILE_SIZE_ONE_MB = 1048576
 FILE_STRICT_CHECKING = True
 FILE_BYTE_TO_CHECK = 2048
-FILE_SIZE_FIVE_MB = mb * 5
 FILE_SIZES = {
-    "icon": FILE_SIZE_FIVE_MB,
-    "image": FILE_SIZE_FIVE_MB,
-    "thumb": FILE_SIZE_FIVE_MB,
-    "video": FILE_SIZE_FIVE_MB,
-    "audio": FILE_SIZE_FIVE_MB,
-    "doc": FILE_SIZE_FIVE_MB,
+    "icon": FILE_SIZE_ONE_MB,
+    "image": FILE_SIZE_ONE_MB * 10,
+    "thumb": FILE_SIZE_ONE_MB * 5,
+    "video": FILE_SIZE_ONE_MB * 50,
+    "audio": FILE_SIZE_ONE_MB * 10,
+    "doc": FILE_SIZE_ONE_MB * 20,
 }
 FILE_TYPES = {
     "icon": [png, ico],

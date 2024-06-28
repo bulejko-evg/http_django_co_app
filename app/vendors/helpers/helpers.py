@@ -1,5 +1,6 @@
 import string
 import secrets
+from app.vendors import data
 from datetime import datetime
 from django.conf import settings
 from collections import UserDict
@@ -107,6 +108,58 @@ def get_html_tag_style(**kwargs: str) -> str:
     )
 
 
+def get_format_html_img(src: str, width: int, **attributes: str) -> str:
+    """
+    Get format html img tag by src, width and any attributes.
+    ---------------------------------------------------------
+    Parameters:
+        src (str): image src
+        width (int): image width
+        **attributes (str): tags for html image tag
+    Returns:
+        (str): format html image tag
+    """
+    attrs_str = get_html_tag_attributes(**attributes)
+    return format_html(f"<img width='{width}' src='{src}' {attrs_str}/>")
+
+
+def get_file_extensions_by_key(by_key: str, file_types: dict | None = None) -> List[str]:
+    """
+    Get file extensions by file type.
+    ---------------------------------
+    Parameters:
+        by_key (str): file type key
+        file_types (dict): file types
+    Returns:
+        res (list[str]): extensions for file type
+    """
+    res = []
+    types = file_types or settings.FILE_TYPES
+    for ft in types.get(by_key, []):
+        ext = ft[0] if isinstance(ft, tuple) else ft
+        res.append(str(ext))
+    return res
+
+
+def get_choices_of_languages(
+        langs_codes: list[str] | None = None,
+        languages: list[data.Language] | None = None
+    ) -> List[Tuple[int, int]]:
+    """
+    Get languages choices list.
+    ---------------------------
+    Parameters:
+        langs_codes (str): file type key
+        languages: (list[data.Language]): list of namedtuple Language(name, code)
+    Returns:
+        langs_choices list[tuple[str, str]]: tuple language name, language code
+    """
+    codes = langs_codes or settings.LANGUAGES_CODES
+    data_languages = languages or data.LANGUAGES
+    langs_choices = [(lang.code, lang.name,) for lang in data_languages if lang.code in codes]
+    return langs_choices
+
+
 def generate_password(
         qty: int = settings.PASSWORD_LENGTH,
         characters: tuple[str] = settings.CHARACTERS_FOR_PASSWORD
@@ -166,4 +219,16 @@ def get_dict_value_by_keychain(dict_: dict, keychain: str) -> Any:
     Returns:
         res (Any): value from dict, or None
     """
-    pass
+    res = dict_
+    list_of_keys = keychain.split(".")
+
+    for key in list_of_keys:
+        try:
+            res = res.get(key, None)
+        except AttributeError:
+            res = None
+            break
+        if res is None: #  value by key not exist
+            break
+
+    return res

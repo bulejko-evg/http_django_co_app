@@ -10,8 +10,8 @@ def check_full_match(
     pattern: re.Pattern | str,
     value: str,
     error_message: str,
-    success_message: str = "",
-) -> tuple[bool, str]:
+    success_message: str | None = None
+) -> Tuple[bool, str]:
     """
     Check value by re.fullmatch with pattern.
     -----------------------------------------
@@ -19,7 +19,7 @@ def check_full_match(
         pattern (re.Pattern): re compile pattern
         value (str): value for checking
         error_message (str): error message
-        success_message (str): success message, optional, default ""
+        success_message (str): success message, optional, default None
     Returns:
         (tuple[bool, str]): result of checking, message
     """

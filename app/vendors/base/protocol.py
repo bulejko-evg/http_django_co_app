@@ -12,8 +12,14 @@ class FileProtocol(Protocol):
     def path(self) -> str:
         """Get file path"""
         ...
+    
+    @property
+    def size(self) -> float:
+        """Get file size"""
+        ...
 
-    def get_extension(self) -> str:
+    @property
+    def extension(self) -> str:
         """Get file extension"""
         ...
 
