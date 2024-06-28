@@ -42,6 +42,7 @@ DEFAULT_FILES = {
     "img_icon": "images/default/icon.png",
     "img_user": "images/default/user.png",
 }
+DEFAULT_IMAGE_KEY = list(DEFAULT_FILES)[0]
 
 IMAGE_WIDTH = {
     "icon": 40,

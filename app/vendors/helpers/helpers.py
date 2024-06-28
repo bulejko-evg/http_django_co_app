@@ -161,7 +161,7 @@ def get_choices_of_languages(
 
 
 def generate_password(
-        qty: int = settings.PASSWORD_LENGTH,
+        qty: int = settings.LENGTH["password"]["min"],
         characters: tuple[str] = settings.CHARACTERS_FOR_PASSWORD
     ) -> str:
     """

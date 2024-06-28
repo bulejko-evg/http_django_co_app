@@ -14,10 +14,10 @@ from app.vendors.helpers.validations import (
     validate_json_descriptions,
 )
 from app.vendors.helpers import (
-    get_url_file,
-    get_path_file,
+    get_file_url,
+    get_file_path,
     get_format_html_img_tag,
-    get_value_from_dict,
+    get_val_from_dict,
 )
 
 
@@ -39,7 +39,7 @@ class KeyLanguageCodeDict(dict):
     @property
     def inst_in_current_language(self):
         """Get instance in current language"""
-        return get_value_from_dict(self, by_key=get_language())
+        return get_val_from_dict(self, by_key=get_language())
     
     @property
     def format_html_br(self):
@@ -128,13 +128,13 @@ class ExtImageFieldFile(ExtFileMixin, ImageFieldFile):
         Returns:
             (str): html tag <img> with src self.url or default image by key
         """
-        url = get_url_file(self, or_def_by_key=or_def_by_key)
+        url = get_file_url(self, or_def_by_key=or_def_by_key)
         return get_format_html_img_tag(src=url, width=width, **tags)
 
     def resize(self, width: int) -> Any | None:
         """Resize image to width and save"""
         if self:
-            if img_path := get_path_file(self):
+            if img_path := get_file_path(self):
                 new_img = resize_image(img_path, width)
                 if new_img:
                     return new_img.save(img_path)
@@ -148,7 +148,6 @@ class ExtImageField(models.ImageField):
         super().__init__(*args, **kwargs)
 
 
-
 class ExtFieldFile(ExtFileMixin, FieldFile):
     """
     Custom FieldFile file.
@@ -160,9 +159,9 @@ class ExtFieldFile(ExtFileMixin, FieldFile):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
 
-class ExtFieldFile(models.FieldFile):
+
+class ExtFieldFile(models.FileField):
     """Custom FieldFile"""
     attr_class = ExtFieldFile
 

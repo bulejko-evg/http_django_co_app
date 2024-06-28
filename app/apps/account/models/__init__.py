@@ -5,3 +5,4 @@ from .account import (
     Customer,
     Guest,
 )
+from .profile import Profile
