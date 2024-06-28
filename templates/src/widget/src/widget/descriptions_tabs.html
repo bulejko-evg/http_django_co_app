@@ -1,0 +1,53 @@
+<div class="widget-item-{{ widget.name }}" data-name="{{ widget.name }}">
+    <div>
+        {% for tab_item in widget.tab_items %}
+            <span class="tab__item tab__item-{{ widget.name }}
+                {% if widget.def_item == tab_item %}select{% endif %}"
+                data-item="{{ tab_item }}"
+                onclick="descTm.selectTab(this)"
+            >{{ tab_item }}</span>
+        {% endfor %}
+    </div>
+    <div class="tabs-content-wrap tabs-content-wrap-{{ widget.name }}">
+        {% for tab_item in widget.tab_items %}
+            <textarea class="tab-content__item tab-content__item-{{ widget.name }}
+                {% if widget.def_item != tab_item %}hidden{% endif %}"
+                data-item="{{ tab_item }}" {{ widget.attrs }}
+                oninput="descTm.changeContent(this)"
+            ></textarea>
+        {% endfor %}
+    </div>
+    <div>
+        <textarea
+            style="visibility:hidden;"
+            class="json-textarea-{{ widget.name }}"
+            id="jsonwidget-{{ widget.name }}"
+            name="{{ widget.name }}"
+            {{ widget.attrs }}
+        >
+            {% if widget.value %}{{ widget.value }}{% endif %}
+        </textarea>
+    </div>
+</div>
+<script>
+    let descTm = new JsonFieldTabsManager({"key": "{{widget.name}}"})
+</script>
+<style>
+    .tab__item {
+        padding: 3px 5px 2px 5px;
+        cursor: pointer;
+    }
+    .tabs-content-wrap {
+        position: relative;
+    }
+    .tab-content__item {
+        position: absolute;
+        top: 0;
+    }
+    .hidden {
+        visibility:hidden;
+    }
+    .select {
+        background-color: #cccccc;
+    }
+</style>

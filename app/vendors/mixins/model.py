@@ -46,25 +46,27 @@ class SoftDeleteMixin(models.Model):
 
     @property
     def deleted(self) -> bool:
-        """Get the deleted_at is None"""
+        """Get the deleted_at is None."""
         return self.deleted_at is not None
     
     @deleted.setter
     def deleted(self, val: bool) -> None:
-        """Set deleted_at as timezone.now or None"""
+        """Set deleted_at as timezone.now or None."""
         self.deleted_at = timezone.now() if val is True else None
 
     class Meta:
         abstract = True
     
     def delete(self, soft=False, **kwargs) -> None:
-        """Delete or soft delete"""
+        """Delete or soft delete."""
         if soft is True:
             self.deleted_at = timezone.now()
         super().delete(soft=soft, **kwargs)
     
     def is_actual(self) -> Tuple[bool, List[str]]:
-        """Get (tuple) is the model item actual (bool, deleted_at is None), with fail messages (list[str])"""
+        """
+        Get (tuple) is the model item actual (bool, deleted_at is None), 
+        with fail messages (list[str])."""
         is_actual, fail_messages = super().is_actual()
         if self.deleted_at is not None:
             is_actual = False
@@ -90,11 +92,11 @@ class RolePermissionsMixin(models.Model):
         abstract = True
     
     def get_permissions(self) -> dict:
-        """Get _permissions attribute or empty dict"""
+        """Get _permissions attribute or empty dict."""
         return getattr(self, "_permissions", {})
     
     def __setattr__(self, name: str, value: Any) -> None:
-        """Prohibit attribute _permissions changes"""
+        """Prohibit attribute _permissions changes."""
         if name == "_permissions":
             return
         return super().__setattr__(name, value)
