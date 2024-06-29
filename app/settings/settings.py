@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Apps
+    # apps
     "app.apps.account.apps.AccountConfig",
+    "app.apps.company.apps.CompanyConfig",
     # extensions
     "django_ckeditor_5",
 ]
