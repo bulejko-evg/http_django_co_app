@@ -1,10 +1,37 @@
 from django.db import models
+from django.contrib import admin
+from django.conf import settings
 from .queryset import BaseQuerySet
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from typing import (
     Tuple,
     List,
 )
+
+
+@admin.action(description=_("Mark selected as valid"))
+def make_valid(modeladmin, request, queryset):
+    """Mark as valid"""
+    queryset.update(is_valid=True)
+
+
+@admin.action(description=_("Mark selected as not valid"))
+def make_invalid(modeladmin, request, queryset):
+    """Mark as invalid"""
+    queryset.update(is_valid=False)
+
+
+@admin.action(description=_("Mark selected as blocked"))
+def make_blocked(modeladmin, request, queryset):
+    """Mark as blocked"""
+    queryset.update(is_blocked=True)
+
+
+@admin.action(description=_("Mark selected as unblocked"))
+def make_unblocked(modeladmin, request, queryset):
+    """Mark as unblocked"""
+    queryset.update(is_blocked=False)
 
 
 class BaseModel(models.Model):
@@ -19,6 +46,12 @@ class BaseModel(models.Model):
     Methods:
         delete (soft=False): delete or soft delete
         is_actual (): get tuple, is the model item actual (valid and not blocked), with fail messages (list[str])
+    Admin:
+        blocked: svg icon for admin table
+        actual_list_display: actual fields list_display
+        actual_list_filter: actual fields list_filter
+        actual_fieldsets: actual fields
+        actual_actions: model actual actions
     """
     is_valid = models.BooleanField(
         default=False
@@ -62,3 +95,29 @@ class BaseModel(models.Model):
             fail_messages.append(_("Blocked"))
         
         return is_actual, fail_messages
+    
+    @admin.display(description=_("Blocked"))
+    def blocked(self):
+        """Get blocked svg icon or None."""
+        if self.is_blocked:
+            return format_html(settings.SVG["block"])
+        return None
+    
+    actual_display = (
+        "is_valid",
+        "blocked",
+    )
+    actual_filters = (
+        "is_blocked",
+        "is_valid",
+    )
+    actual_fieldsets = (
+        "is_blocked",
+        "is_valid",
+    )
+    actual_actions = [
+        make_valid,
+        make_invalid,
+        make_blocked,
+        make_unblocked,
+    ]

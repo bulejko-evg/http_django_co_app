@@ -23,7 +23,13 @@ SECRET_KEY = config("SECRET_KEY", "django-insecure-zqo(j_)@4!(&f(4yz5+5t6iiwm=x3
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -38,6 +44,10 @@ INSTALLED_APPS = [
     # Apps
     "app.apps.account.apps.AccountConfig",
 ]
+if DEBUG:
+    INSTALLED_APPS.append(
+        "debug_toolbar",
+    )
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -48,13 +58,17 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE.append(
+        "debug_toolbar.middleware.DebugToolbarMiddleware"
+    )
 
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -103,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
@@ -111,11 +125,26 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = (
+    BASE_DIR / "locale",
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media/"
+
+TMP_URL = "tmp"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -128,3 +157,16 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "app.vendors.utils.auth.AuthBackend",
 ]
+
+
+HOME_URL = "company:home"
+
+LOGIN_URL = "account:login"
+LOGIN_REDIRECT_URL = "company:protect_dashboard"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
+    }
+}

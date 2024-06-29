@@ -72,7 +72,7 @@ class Profile(models.Model):
 
     @property
     def middle_name(self):
-        return f" {str(self._middle_name).capitalize()}" if self._middle_name else ""
+        return f" {str(self._middle_name).capitalize()}" if self._middle_name else " "
 
     @property
     def last_name(self):
