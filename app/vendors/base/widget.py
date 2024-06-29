@@ -45,4 +45,3 @@ class NamesTabsWidget(JsonFieldDictTabsWidget):
 class DescriptionsTabsWidget(JsonFieldDictTabsWidget):
     """Descriptions JsonField Tabs widget"""
     template_name = "src/widget/descriptions_tabs.html"
-

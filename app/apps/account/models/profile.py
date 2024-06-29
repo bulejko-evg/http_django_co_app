@@ -65,7 +65,7 @@ class Profile(models.Model):
         choices=Gender.choices,
         default=Gender.MALE,
     )
-
+    
     @property
     def first_name(self):
         return str(self._first_name).capitalize()

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin as adm
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import gettext_lazy as _
@@ -46,7 +47,7 @@ class AccountManager(BaseUserManager):
         self._check(username, email, password)
 
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save()
         return user
@@ -56,6 +57,10 @@ class AccountManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_valid", True)
+        extra_fields.setdefault("is_blocked", False)
+        extra_fields.setdefault("is_confirmed", True)
+        extra_fields.setdefault("role", Account.Role.SU)
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError(_("Superuser must have is_staff=True."))
@@ -233,6 +238,14 @@ class Account(TimestampsMixin, SoftDeleteMixin, RolePermissionsMixin, AbstractBa
             ]
         },
     }
+
+    @adm.display(description="Full name")
+    def full_name(self):
+        return self.profile.full_name
+
+    @adm.display(description=_("Photo"))
+    def photo(self):
+        return self.profile.photo.get_html_img_tag(or_def_by_key="user", alt="user")
 
 
 class Admin(Account):
