@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.core.cache import cache
 from django.db.models.functions import Mod
+from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.translation import gettext_lazy as _
 from app.vendors.helpers import get_choices_of_languages
 from django.utils.html import (
@@ -278,7 +279,8 @@ class LanguageRichTextMixin(models.Model):
         max_length=8,
         choices=get_choices_of_languages(),
     )
-    rich_text = models.TextField(
+    rich_text = CKEditor5Field(
+        config_name="extends",
         blank=True,
         null=True,
     )

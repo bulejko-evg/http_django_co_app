@@ -4,6 +4,7 @@ python-decouple
 celery
 redis
 django-debug-toolbar
+django-ckeditor-5
 factory-boy
 Faker
 pytest

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Apps
     "app.apps.account.apps.AccountConfig",
+    # extensions
+    "django_ckeditor_5",
 ]
 if DEBUG:
     INSTALLED_APPS.append(
