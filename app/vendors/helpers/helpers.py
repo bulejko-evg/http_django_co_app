@@ -1,4 +1,5 @@
 import string
+import shutil
 import secrets
 from app.vendors import data
 from datetime import datetime
@@ -232,3 +233,8 @@ def get_dict_value_by_keychain(dict_: dict, keychain: str) -> Any:
             break
 
     return res
+
+
+def remove_directory(by_path: str):
+    """Remove directory by path"""
+    shutil.rmtree(by_path, ignore_errors=True)

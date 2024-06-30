@@ -133,9 +133,10 @@ class RolePermissionsMixin(models.Model):
     class Meta:
         abstract = True
     
-    def get_permissions(self) -> dict:
+    @classmethod
+    def get_permissions(cls) -> dict:
         """Get _permissions attribute or empty dict."""
-        return getattr(self, "_permissions", {})
+        return getattr(cls, "_permissions", {})
     
     def __setattr__(self, name: str, value: Any) -> None:
         """Prohibit attribute _permissions changes."""

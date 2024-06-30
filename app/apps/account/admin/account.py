@@ -6,6 +6,10 @@ from django.http.request import HttpRequest
 from django.contrib.auth.admin import UserAdmin
 from app.vendors.base.model.admin import AdminBaseModel
 from django.utils.translation import gettext_lazy as _
+from app.apps.account.models.account import (
+    set_account_permissions,
+    _models_roles_permissions,
+)
 from app.apps.account.forms.admin import (
     AccountCreationForm,
     AccountChangeForm,
@@ -37,7 +41,7 @@ class AccountAdmin(UserAdmin, AdminBaseModel):
 
     list_display = (
         "username",
-        "photo",
+        "photo_img",
         "email",
         "full_name",
         "is_staff",
@@ -124,6 +128,7 @@ class AccountAdmin(UserAdmin, AdminBaseModel):
 
     def save_model(self, request, obj, form, change) -> None:
         super().save_model(request, obj, form, change)
+        set_account_permissions(obj, _models_roles_permissions)
 
     def save_formset(self, request: Any, form: Any, formset: Any, change: Any) -> None:
         super().save_formset(request, form, formset, change)
@@ -133,7 +138,6 @@ class AccountAdmin(UserAdmin, AdminBaseModel):
             obj.photo.resize(width=settings.IMAGE_WIDTH["user"])
 
     def delete_model(self, request: HttpRequest, obj: Any) -> None:
-        obj.profile.photo.delete()
         return super().delete_model(request, obj)
 
     def delete_queryset(self, request, queryset):

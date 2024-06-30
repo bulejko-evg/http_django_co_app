@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib import admin as adm
+from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import gettext_lazy as _
@@ -21,6 +22,14 @@ from ..utils import (
     set_account_permissions, 
     account_token,
 )
+from app.vendors.helpers.validations import (
+    is_username_valid,
+    is_email_valid,
+    is_password_valid,
+    validate_username,
+    validate_email,
+    validate_password,
+)
 from django.utils.http import (
     urlsafe_base64_decode,
     urlsafe_base64_encode,
@@ -35,9 +44,13 @@ from typing import (
     Self,
 )
 
+from app.apps.company.models import Company
+
 
 # permissions of models for roles
-_models_roles_permissions = {}
+_models_roles_permissions = {
+    **Company.get_permissions(),
+}
 
 
 class AccountManager(BaseUserManager):
@@ -70,7 +83,19 @@ class AccountManager(BaseUserManager):
     
     def _check(self, username, email, password) -> None:
         """Check username, email, password of account."""
-        pass
+        validators = {
+            "username": is_username_valid(username),
+            "email": is_email_valid(email),
+            "password": is_password_valid(password)
+        }
+        validate_result, check_messages = True, []
+        for key, validator in validators.items():
+            check_result, fail_messages = validator
+            if  check_result is False:
+                validate_result = False
+                check_messages.append(f"{key}:{fail_messages}")
+        if validate_result is False:
+            raise ValidationError(check_messages)
 
 
 class AdminManager(AccountManager):
@@ -109,11 +134,18 @@ class Account(TimestampsMixin, SoftDeleteMixin, RolePermissionsMixin, AbstractBa
 
     username = models.CharField(
         max_length=80,
-        unique=True
+        unique=True,
+        validators=[validate_username]
     )
     email = models.EmailField(
         max_length=80,
-        unique=True
+        unique=True,
+        validators=[validate_email]
+    )
+    password = models.CharField(
+        _("password"), 
+        max_length=128,
+        validators=[validate_password]
     )
     is_staff = models.BooleanField(
         default=False
@@ -244,8 +276,8 @@ class Account(TimestampsMixin, SoftDeleteMixin, RolePermissionsMixin, AbstractBa
         return self.profile.full_name
 
     @adm.display(description=_("Photo"))
-    def photo(self):
-        return self.profile.photo.get_html_img_tag(or_def_by_key="user", alt="user")
+    def photo_img(self):
+        return self.profile.photo.get_html_img_tag(or_def_by_key="img_user", alt="img_user")
 
 
 class Admin(Account):

@@ -8,7 +8,7 @@ class AdminBaseModel(admin.ModelAdmin):
     empty_value_display = settings.EMPTY_VALUE
 
     def save_model(self, request, obj, form, change):
-        """Save model with set created (Account) and updated (Account) fields"""
+        """Save model with set created (Account) and updated (Account) fields."""
         if change:
             if hasattr(obj, "updated"):
                 obj.updated = request.user
