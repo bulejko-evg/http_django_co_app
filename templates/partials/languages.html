@@ -1,0 +1,11 @@
+{% if languages %}
+<ul class="relative language__list">
+    {% for lang in languages %}
+        <li class="absolute language__item {% if lang==current_lang %}active{% endif %}">
+            {{ lang }}
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <span>{{ current_lang }}</span>
+{% endif %}

@@ -1,0 +1,11 @@
+{% extends "basic.html" %} 
+{% load static %} 
+{% load i18n %}
+
+
+{% block layout %}
+    {% block content_layout %}
+        <!-- page content -->
+    {% endblock content_layout %}
+    {% include "partials/headers/bottom.html" %}
+{% endblock layout %} 

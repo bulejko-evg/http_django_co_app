@@ -1,11 +1,10 @@
 from django import forms
 from django.db.models import Q
-from django.conf import settings
+from django_ckeditor_5.widgets import CKEditor5Widget
 from django.utils.translation import gettext_lazy as _
 from app.vendors.base.widget import (
     NamesTabsWidget,
     DescriptionsTabsWidget,
-    RichTextWidget,
 )
 
 
@@ -36,18 +35,18 @@ class RichTextMixin:
 
     class Meta:
         widgets = {
-            "rich_text": RichTextWidget(
+            "rich_text": CKEditor5Widget(
                 attrs={
                     "cols": 40,
                     "rows": 20
                 },
+                config_name="extends",
             ),
         }
 
 
 class TreePositionFormMixin:
     """Form mixin for set position field for TreeMixin."""
-    __slots__ = ("set_position_choices",)
 
     def set_position_choices(self, *args, **kwargs):
         inst = kwargs.get("instance", None)

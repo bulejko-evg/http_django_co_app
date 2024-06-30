@@ -754,7 +754,7 @@ class CacheMixin(models.Model):
     """
 
     @classmethod
-    def get_from_cache(cls, by_key: str = "", prefix: str = "", postfix: str = "", **kwargs) -> Any:
+    def get_from_cache(cls, by_key: str = "", prefix: str = "", postfix: str = "", **cache_queryset_kwargs) -> Any:
         """
         Get result of queryset from cache by key.
         -----------------------------------------
@@ -762,7 +762,7 @@ class CacheMixin(models.Model):
             by_key (str): cache key, if empty key is class name, default empty str,
             prefix (str): cache key prefix, default empty str
             postfix (str): cache key postfix, default empty str
-            **kwargs: parameters for cache_queryset method
+            **cache_queryset_kwargs: parameters for cache_queryset method
         Methods:
             delete_cache (): delete cache by key
         Returns:
@@ -771,7 +771,7 @@ class CacheMixin(models.Model):
         _by_key = cls._get_cache_key(by_key, prefix, postfix)
         res = cache.get(_by_key, None)
         if res is None:
-            res = cls.cache_queryset(**kwargs)
+            res = cls.cache_queryset(**cache_queryset_kwargs)
         return res
 
     def delete_cache(self, by_key: str = "", prefix: str = "", postfix: str = "") -> None:
@@ -790,7 +790,7 @@ class CacheMixin(models.Model):
         abstract = True
 
     @classmethod
-    def _get_cache_key(cls, by_key: str = "", prefix: str = "", postfix: str = "") -> str:
+    def _get_cache_key(cls, by_key: str | None = None, prefix: str | None = None, postfix: str | None = None) -> str:
         """
         Get cache key. if by_key is empty, key is class name.
         -----------------------------------------------------
@@ -802,6 +802,6 @@ class CacheMixin(models.Model):
             (str): prefix + _ + cache_key + _ + postfix
         """
         _by_key = by_key or cls.__name__.upper()
-        _prefix = f"{prefix}_" or ""
-        _postfix = f"_{postfix}" or ""
-        return f"{prefix}{_by_key}{postfix}"
+        _prefix = f"{prefix}_" if prefix else ""
+        _postfix = f"_{postfix}" if postfix else ""
+        return f"{_prefix}{_by_key}{_postfix}"

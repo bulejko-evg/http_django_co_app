@@ -1,0 +1,12 @@
+{% extends "basic.html" %}
+{% load static %}
+{% load i18n %}
+
+
+{% block layout %}
+    {% include "partials/headers/protect.html" %}
+    {% block content_layout %}
+        <!-- page content -->
+    {% endblock content_layout %}
+    {% include "partials/footers/protect.html" %}
+{% endblock layout %}

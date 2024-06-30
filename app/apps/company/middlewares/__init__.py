@@ -1,0 +1,1 @@
+from .locale import set_language_middleware

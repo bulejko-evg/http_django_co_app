@@ -235,6 +235,27 @@ def get_dict_value_by_keychain(dict_: dict, keychain: str) -> Any:
     return res
 
 
+def update_request_get_parameters(params: dict, **kwargs) -> str:
+    """
+    Update request get parameters
+    Parameters:
+        params (dict): request.get parameters
+        **kwargs (str): new parameters
+    Returns:
+        res_str (str): srt of get parameters for request
+    """
+    params = params if params is not None else {}
+    updated_params = {**params, **kwargs}
+    tmp_list = []
+    for k, v in updated_params.items():
+        v = str(v[0]) if isinstance(v, list) else str(v)
+        tmp_list.append(f'{k}={v}')
+    res_str = '&'.join(tmp_list)
+    if res_str:
+        res_str = '?'+res_str
+    return res_str
+
+
 def remove_directory(by_path: str):
     """Remove directory by path"""
     shutil.rmtree(by_path, ignore_errors=True)

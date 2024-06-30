@@ -1,0 +1,9 @@
+{% if messages %}
+<ul class="relative messages__list">
+    {% for message in messages %}
+    <li {% if message.tags %} class="absolute messages__item{{ message.tags }}"{% endif %}>
+        {{ message }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

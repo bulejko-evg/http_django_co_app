@@ -1,0 +1,21 @@
+{% load i18n %}
+
+
+<header id="header" class="header">
+    clear header
+    {% if request.user.is_authenticated %}
+        <small>{{ request.user.username }}</small>
+        <div>
+            <a href="{% url 'company:protect_dashboard' %}">
+                {% translate "Dashboard" %}
+            </a>
+            <a href="{% url 'account:logout' %}">{% translate "Logout" %}</a>
+        </div>
+    {% else %}
+        <small class="title text-muted text-center">{% translate "Welcome guest!" %}</small>
+        <div>
+            <a href="{% url 'account:login' %}">{% translate "Sign in" %}</a>
+            <a href="{% url 'account:register' %}">{% translate "Register" %}</a>
+        </div>
+    {% endif %}
+</header>

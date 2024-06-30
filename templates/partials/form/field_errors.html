@@ -1,0 +1,7 @@
+<div class="relative">
+    <ul style="{{css_style}}" class="absolute form_field_errors__list {{css_classes}}">
+        {% for error in errors %}
+            <li class="form_field_errors__item">{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>

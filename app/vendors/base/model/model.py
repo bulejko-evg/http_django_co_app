@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib import admin
 from django.conf import settings
 from .queryset import BaseQuerySet
@@ -95,6 +96,10 @@ class BaseModel(models.Model):
             fail_messages.append(_("Blocked"))
         
         return is_actual, fail_messages
+    
+    def get_admin_changelist_url(self):
+        """Get changelist url for model"""
+        return reverse(f'admin:{self._meta.app_label}_{self._meta.model_name}_changelist')
     
     @admin.display(description=_("Blocked"))
     def blocked(self):

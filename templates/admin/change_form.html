@@ -1,0 +1,18 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    {% if show_soft_delete %}
+        <div style="float:right;" class="submit-row">
+            {% if soft_delete %}
+                <input style="background-color:darkorange;color:white" type="submit"
+                    value="Unmark deleted" name="soft_delete_cancel">
+            {% else %}
+                <input style="background-color:crimson;color:white" type="submit"
+                    value="Marked as deleted" name="soft_delete">
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

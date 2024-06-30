@@ -1,0 +1,13 @@
+{% load i18n %}
+{% autoescape off %}
+
+<p>
+    {% translate "Hello" %} {{ user_name }}
+</p>
+<p>
+    <a href="{{ confirmation_link }}">
+        {% translate "Reset password link" %}               
+    </a>
+</p>
+
+{% endautoescape %}

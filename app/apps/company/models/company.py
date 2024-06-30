@@ -86,7 +86,7 @@ class Company(NamesDescriptionsMixin, TimestampsMixin, RolePermissionsMixin, Cac
 
     def save(self, **kwargs):
         super().save(**kwargs)
-        self.delete_cache(prefix=str(self.alias))
+        self.delete_cache(prefix=self.alias)
 
     def get_instance_media_path(self):
         """Get path for instance in settings.MEDIA_ROOT directory"""
@@ -110,7 +110,7 @@ class Company(NamesDescriptionsMixin, TimestampsMixin, RolePermissionsMixin, Cac
 
     @admin.display(description=_("Logo"))
     def logo_img(self):
-        return self.logo.get_html_img_tag(or_def_by_key="logo", alt="img_logo")
+        return self.logo.get_html_img_tag(or_def_by_key="img_logo", alt="logo")
 
 
 @receiver(pre_delete, sender=Company)
@@ -123,6 +123,7 @@ def company_delete(sender, instance, **kwargs):
 
 
 class CompanyTranslate(LanguageRichTextMixin, MetaDataMixin, models.Model):
+    
     company = models.ForeignKey(
         "Company",
         related_name="trs",

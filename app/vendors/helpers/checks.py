@@ -201,6 +201,8 @@ def check_file_mime_buff(
             file.seek(0)
             file_type_buff = magic.from_buffer(file.read(settings.FILE_BYTE_TO_CHECK))
             file.seek(initial_pos)
+            print("BUFF", buff)
+            print("BUFF TYPE", file_type_buff)
             if buff not in file_type_buff:
                 result_of_checking = False
                 message = msg.INVALID_FILE % {"details": "fail BUFFER"}
