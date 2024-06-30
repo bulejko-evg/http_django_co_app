@@ -31,16 +31,16 @@ class Command(BaseCommand):
         if company is not None:
             raise CommandError(f"A company with the same alias ({alias}) already exists")
         
-        ompany = Company.objects.create()
-        # try:
-        #     company = Company.objects.create(
-        #         alias=alias,
-        #         is_blocked=False,
-        #         is_valid=True,
-        #         settings=settings.COMPANY_SETTINGS
-        #     )
-        #     company.save()
-        # except Exception as e:
-        #     raise CommandError("ERROR Company creation >> ", e)
+        try:
+            company = Company(
+                alias="f",
+                is_blocked=False,
+                is_valid=True,
+                settings=settings.COMPANY_SETTINGS
+            )
+            if company.full_clean() is None:
+                company.save()
+        except Exception as exc:
+            raise CommandError("ERROR Company creation >> ", exc)
 
         self.stdout.write(self.style.SUCCESS(f"Successfully created a company with alias: {alias}"))

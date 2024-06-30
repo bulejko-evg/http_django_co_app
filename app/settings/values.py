@@ -6,7 +6,7 @@ EMPTY_VALUE = "_"
 NUMBER_PER_PAGE = 15
 
 LENGTH = {
-    "alias": {"min": 3, "max": 30},
+    "alias": {"min": 2, "max": 30},
     "username": {"min": 3, "max": 30},
     "email": {"min": 5, "max": 30},
     "password": {"min": 8, "max": 16},

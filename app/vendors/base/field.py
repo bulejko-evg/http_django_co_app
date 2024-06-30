@@ -52,7 +52,7 @@ class KeyLanguageCodeDict(dict):
 class KeyLanguageCodeDictJsonField(models.JSONField):
     """Custom JsonField with default dict KeyLanguageCodeDict"""
     def __init__(self, *args, **kwargs):
-        kwargs["default"] = KeyLanguageCodeDict
+        kwargs["default"] = dict
         super().__init__(*args, **kwargs)
 
     def from_db_value(self, value, expression, connection):
