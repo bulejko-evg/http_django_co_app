@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib import admin as adm
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
@@ -99,13 +100,13 @@ class AccountManager(BaseUserManager):
 
 
 class AdminManager(AccountManager):
-    """Custom account manager for role Admin"""
+    """Custom account manager for role Admin."""
     def get_queryset(self):
         return super().get_queryset().filter(role=Account.Role.ADMIN)
 
 
 class EmployeeManager(AccountManager):
-    """Custom account manager for role Employee"""
+    """Custom account manager for role Employee."""
     def get_queryset(self):
         return super().get_queryset().filter(role=Account.Role.EMPLOYEE)
 
@@ -133,19 +134,14 @@ class Account(TimestampsMixin, SoftDeleteMixin, RolePermissionsMixin, AbstractBa
         GUEST = "GUEST", _("Guest")
 
     username = models.CharField(
-        max_length=80,
+        max_length=settings.LENGTH["username"]["max"],
         unique=True,
         validators=[validate_username]
     )
     email = models.EmailField(
-        max_length=80,
+        max_length=settings.LENGTH["email"]["max"],
         unique=True,
         validators=[validate_email]
-    )
-    password = models.CharField(
-        _("password"), 
-        max_length=128,
-        validators=[validate_password]
     )
     is_staff = models.BooleanField(
         default=False
@@ -181,7 +177,8 @@ class Account(TimestampsMixin, SoftDeleteMixin, RolePermissionsMixin, AbstractBa
     @confirmed.setter
     def confirmed(self, val: bool) -> None:
         self.is_confirmed = val
-        self.actual = False
+        self.actual = val
+        self.save()
     
     @property
     def uid_token(self) -> tuple[str, str]:
@@ -213,7 +210,7 @@ class Account(TimestampsMixin, SoftDeleteMixin, RolePermissionsMixin, AbstractBa
         """Delete or soft delete account."""
         if soft is True:
             self.is_active = False
-            self.is_confirmed = False
+            self.confirmed = False
         super().delete(soft=soft, **kwargs)
     
     @classmethod

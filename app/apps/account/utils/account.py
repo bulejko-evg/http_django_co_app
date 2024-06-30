@@ -14,8 +14,9 @@ def set_account_permissions(account, models_roles_permissions: dict) -> None:
         _
     """
     account.user_permissions.clear()
+    
     all_permissions = {**account.get_permissions(), **models_roles_permissions}
-    print(all_permissions)
+
     for app_model, perms in all_permissions.items():
         account_role = str(account.role).lower()
         app, model = app_model.split(":")

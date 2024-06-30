@@ -15,9 +15,9 @@ class AccountFactory(factory.django.DjangoModelFactory):
 
     username = fake.lexify(text="??????")
     email = factory.Sequence(lambda n: f"mail_{n}@mail.com")
+    password = "!Q2w3e4r5t"
     is_staff = False
     is_active = True
-    password = "!Q2w3e4r5t"
 
 
 class AdminFactory(AccountFactory):
@@ -55,4 +55,3 @@ class ProfileFactory(factory.django.DjangoModelFactory):
     age = 99
     birthdate = fake.date()
     gender = FuzzyChoice(choices=["FEMALE", "MALE"])
-

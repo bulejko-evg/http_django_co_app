@@ -69,14 +69,27 @@ class Profile(models.Model):
     @property
     def first_name(self):
         return str(self._first_name).capitalize()
+    
+    @first_name.setter
+    def first_name(self, val):
+        self._first_name = str(val).capitalize()
 
     @property
     def middle_name(self):
         return f" {str(self._middle_name).capitalize()}" if self._middle_name else " "
+    
+    @middle_name.setter
+    def middle_name(self, val):
+        if val is not None:
+            self._middle_name = str(val).capitalize()
 
     @property
     def last_name(self):
         return str(self._last_name).capitalize()
+    
+    @last_name.setter
+    def last_name(self, val):
+        self._last_name = str(val).capitalize()
 
     @property
     def full_name(self):

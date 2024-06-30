@@ -142,7 +142,7 @@ class RolePermissionsMixin(models.Model):
         """Prohibit attribute _permissions changes."""
         """Запретить изменение аттрибута """
         if name == "_permissions":
-            return
+            raise AttributeError("_permissions is immutable property")
         return super().__setattr__(name, value)
 
 

@@ -97,7 +97,7 @@ def check_length(
         (Tuple[bool, str]): result of checking, messages
     """
     result_of_checking, message = True, success_message
-    if not min_length < len(value) < max_length:
+    if not min_length <= len(value) <= max_length:
         result_of_checking = False
         message = msg.INVALID_LENGTH_MESSAGE % {"min": min_length, "max": max_length}
 
